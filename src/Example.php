@@ -8,6 +8,7 @@ class Example
 {
     public function foo(): bool
     {
+        echo "test123";
         return true;
     }
 }
