@@ -8,15 +8,16 @@ class ExceptionLoggerMiddleware
 
     public function handle($request, Closure $next)
     {
-        echo("ExceptionLogger start");
-        $response = $next($request);
-        if (!$response->exception) {
-            echo("ExceptionLogger end");
-            return $response;
+        try {
+            echo("ExceptionLogger start");
+            $response = $next($request);
+
+        } catch (\Exception $e) {
+            echo("ExceptionLogger end with exception");
+            //return the error message
+            return $e->getMessage();
         }
-        echo($response->exception);
-        return "ExceptionLogger end with exception";
-
-
+        echo("ExceptionLogger end");
+        return $response;
     }
 }
