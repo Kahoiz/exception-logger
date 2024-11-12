@@ -10,7 +10,11 @@ class ExceptionLoggerMiddleware
     {
         echo("ExceptionLogger start");
         $response = $next($request);
-        echo("ExceptionLogger end");
+        if (!$response->exception) {
+            echo("ExceptionLogger end");
+            return $response;
+        }
+        echo($response->exception);
         return $response;
 
 
