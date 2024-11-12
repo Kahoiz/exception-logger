@@ -1,19 +1,22 @@
 <?php
 namespace kahoiz\ExceptionLogger;
 use Closure;
+use Dotenv\Dotenv;
+use PDO;
 
 
 class ExceptionLoggerMiddleware
 {
-    private $pdo;
+    private PDO $pdo;
     public function __construct()
     {
-        $config = require __DIR__ . '/../config.php';
-        $dsn = "{$config['database']['driver']}:host={$config['database']['host']};port={$config['database']['port']};dbname={$config['database']['database']}";
-        $username = $config['database']['username'];
-        $password = $config['database']['password'];
-        $this->pdo = new \PDO($dsn, $username, $password);
+        $dotenv = Dotenv::createImmutable(base_path());
+        $dotenv->load();
 
+        $dsn = "{$_ENV['DB_DRIVER']}:host={$_ENV['DB_HOST']};port={$_ENV['DB_PORT']};dbname={$_ENV['DB_DATABASE']}";
+        $username = $_ENV['DB_USERNAME'];
+        $password = $_ENV['DB_PASSWORD'];
+        $this->pdo = new \PDO($dsn, $username, $password);
     }
     public function handle($request, Closure $next)
     {
