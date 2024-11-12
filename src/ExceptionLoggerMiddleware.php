@@ -15,7 +15,7 @@ class ExceptionLoggerMiddleware
             return $response;
         }
         echo($response->exception);
-        return $response;
+        return "ExceptionLogger end with exception";
 
 
     }
