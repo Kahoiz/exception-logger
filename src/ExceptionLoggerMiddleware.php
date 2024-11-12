@@ -19,6 +19,10 @@ class ExceptionLoggerMiddleware
         }
         $log = $this->createLog($request, $response);
         $log->save();
+        //return an error message
+        return response()->json([
+            'message' => 'An error occurred'
+        ], 500);
 
 
 
