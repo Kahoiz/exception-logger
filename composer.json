@@ -1,20 +1,8 @@
 {
-    "name": "zing/package-skeleton-php",
-    "description": "A skeleton repository for PHP Packages",
-    "keywords": ["php", "package", "skeleton"],
+    "name": "kahoiz/exception-logger",
+    "description": "A simple exception logger for PHP",
+    "keywords": ["php", "package", "exception", "logging"],
     "license": "MIT",
-    "homepage": "https://github.com/zingimmick/package-skeleton-php",
-    "support": {
-        "issues": "https://github.com/zingimmick/package-skeleton-php/issues",
-        "source": "https://github.com/zingimmick/package-skeleton-php"
-    },
-    "authors": [
-        {
-            "name": "zingimmick",
-            "email": "zingimmick@outlook.com",
-            "homepage": "https://github.com/zingimmick"
-        }
-    ],
     "config": {
         "sort-packages": true,
         "preferred-install": "dist",
@@ -32,17 +20,16 @@
     },
     "require-dev": {
         "phpstan/phpstan": "^1.5.6",
-        "phpunit/phpunit": "^9.3.3 || ^10.0 || ^11.0",
-        "zing/coding-standard": "^7.0"
+        "phpunit/phpunit": "^9.3.3 || ^10.0 || ^11.0"
     },
     "autoload": {
         "psr-4": {
-            "Zing\\Skeleton\\": "src"
+            "kahoiz\\ExceptionLogger\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Zing\\Skeleton\\Tests\\": "tests"
+            "kahoiz\\ExceptionLogger\\Tests\\": "tests"
         }
     },
     "scripts": {
