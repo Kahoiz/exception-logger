@@ -4,23 +4,13 @@ namespace kahoiz\ExceptionLogger;
 
 use Closure;
 use Dotenv\Dotenv;
-use PDO;
+use mysqli;
 
 
 class ExceptionLoggerMiddleware
 {
-    private PDO $pdo;
+    private mysqli $mysqli;
 
-    public function init()
-    {
-        $dotenv = Dotenv::createImmutable(base_path());
-        $dotenv->load();
-
-        $dsn = "{$_ENV['DB_DRIVER']}:host={$_ENV['DB_HOST']};port={$_ENV['DB_PORT']};dbname={$_ENV['DB_DATABASE']}";
-        $username = $_ENV['DB_USERNAME'];
-        $password = $_ENV['DB_PASSWORD'];
-        $this->pdo = new \PDO($dsn, $username, $password);
-    }
 
     public function handle($request, Closure $next)
     {
@@ -30,27 +20,53 @@ class ExceptionLoggerMiddleware
 
 
         } catch (\Exception $e) {
-            echo("ExceptionLogger end with exception");
+            echo("Yes exception");
             $this->init();
             $this->logException($e);
-            //return the error message
-            return $response;
+            return "An error occurred";
         }
-        echo("ExceptionLogger end");
+        echo("No exception end");
         return $response;
+    }
+
+    public function init()
+    {
+        // Load environment variables, base_path() is a laravel helper function, but this package is
+        // suspected to only run in laravel applications, so it should be fine
+        $dotenv = Dotenv::createImmutable(base_path());
+        $dotenv->load();
+
+
+        $this->mysqli = new mysqli(
+            $_ENV['DB_HOST'],
+            $_ENV['DB_USERNAME'],
+            $_ENV['DB_PASSWORD'],
+            $_ENV['DB_DATABASE'],
+            $_ENV['DB_PORT']
+        );
+
+        if ($this->mysqli->connect_error) {
+            die('Connect Error (' . $this->mysqli->connect_errno . ') ' . $this->mysqli->connect_error);
+        }
     }
 
     private function logException(\Exception $e): void
     {
         try {
             echo("Logging exception: " . $e->getMessage() . "\n");
-            $query = $this->pdo->prepare('INSERT INTO exception_logs (message, file, line, trace) VALUES (:message, :file, :line, :trace)');
-            $query->execute([
-                ':message' => $e->getMessage(),
-                ':file' => $e->getFile(),
-                ':line' => $e->getLine(),
-                ':trace' => $e->getTraceAsString(),
-            ]);
+            $stmt = $this->mysqli->prepare('INSERT INTO exception_logs (message, file, line, trace) VALUES (?, ?, ?, ?)');
+            $traceAsString = $e->getTraceAsString();
+            $line = $e->getLine();
+            $file = $e->getFile();
+            $message = $e->getMessage();
+            $stmt->bind_param(
+                'ssis',
+                $message,
+                $file,
+                $line,
+                $traceAsString
+            );
+            $stmt->execute();
             echo("Exception logged successfully\n");
         } catch (\Exception $ex) {
             echo("Failed to log exception: " . $ex->getMessage() . "\n");
