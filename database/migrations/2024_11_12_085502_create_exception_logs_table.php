@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('file');
             $table->integer('line');
             $table->text('trace');
+            $table->string('sessionuid');
             $table->timestamps();
         });
     }

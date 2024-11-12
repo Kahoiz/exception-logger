@@ -8,33 +8,33 @@ use Closure;
 
 class ExceptionLoggerMiddleware
 {
-    private mysqli $mysqli;
 
 
     public function handle($request, Closure $next)
     {
-        try {
-            $response = $next($request);
 
-
-        } catch (\Exception $e) {
-            echo("Yes exception");
-            $this->init();
-            $this->logException($e);
-            return "An error occurred";
+        $response = $next($request);
+        if(!$response->exception) {
+            return $response;
         }
-        echo("No exception end");
-        return $response;
+        $log = $this->createLog($request, $response);
+        $log->save();
+
+
+
     }
 
-    public function init()
+    private function createLog($request, mixed $response)
     {
-
+        $exception = $response->exception;
+        $exceptionLog = new Exceptionlog();
+        $exceptionLog->message = $exception->getMessage();
+        $exceptionLog->file = $exception->getFile();
+        $exceptionLog->line = $exception->getLine();
+        $exceptionLog->trace = $exception->getTraceAsString();
+        $exceptionLog->sessionuid = $request->session()->getId();
+        return $exceptionLog;
     }
 
-    private function logException(\Exception $e): void
-    {
-
-    }
 
 }
