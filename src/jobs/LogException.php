@@ -21,13 +21,13 @@ class LogException implements ShouldQueue
      * @param \Exception $exception
      * @return void
      */
-    public function __construct($exception, $sessionuid)
+    public function __construct(\Exception $exception, $sessionuid)
     {
         $data = [
-            'message' => $this->exception->getMessage(),
-            'file' => $this->exception->getFile(),
-            'line' => $this->exception->getLine(),
-            'trace' => $this->exception->getTraceAsString(),
+            'message' => $exception->getMessage(),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+            'trace' => $exception->getTraceAsString(),
             'sessionuid' => $sessionuid,
             'environment' => env("APP_NAME")
         ];
