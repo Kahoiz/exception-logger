@@ -13,11 +13,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "2.x-dev"
-        },
-        "laravel": {
-            "providers": [
-                "kahoiz\\ExceptionLogger\\ExceptionLoggerServiceProvider"
-            ]
         }
     },
     "require": {
