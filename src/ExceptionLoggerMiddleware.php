@@ -22,6 +22,7 @@ class ExceptionLoggerMiddleware
         //dispatch a job to log the exception
         LogException::dispatch($response->exception, $request->session()->getId());
 
+        return $response;
 
     }
 

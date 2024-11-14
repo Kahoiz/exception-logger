@@ -12,8 +12,7 @@ class LogException implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $exception;
-    protected $sessionuid;
+    protected array $data;
 
     /**
      * Create a new job instance.
@@ -23,7 +22,7 @@ class LogException implements ShouldQueue
      */
     public function __construct(\Exception $exception, $sessionuid)
     {
-        $data = [
+        $this->data = [
             'message' => $exception->getMessage(),
             'file' => $exception->getFile(),
             'line' => $exception->getLine(),
