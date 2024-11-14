@@ -3,7 +3,7 @@
 namespace kahoiz\ExceptionLogger;
 
 use Closure;
-
+use kahoiz\ExceptionLogger\jobs\LogException;
 
 
 class ExceptionLoggerMiddleware
@@ -17,28 +17,10 @@ class ExceptionLoggerMiddleware
         if(!$response->exception) {
             return $response;
         }
-        $log = $this->createLog($request, $response);
-        $log->save();
-        //return an error message
-        return response()->json([
-            'message' => 'An error occurred'
-        ], 500);
-
+        //dispatch a job to log the exception
+        LogException::dispatch($response->exception, session()->getId);
 
 
     }
-
-    private function createLog($request, mixed $response)
-    {
-        $exception = $response->exception;
-        $exceptionLog = new Exceptionlog();
-        $exceptionLog->message = $exception->getMessage();
-        $exceptionLog->file = $exception->getFile();
-        $exceptionLog->line = $exception->getLine();
-        $exceptionLog->trace = $exception->getTraceAsString();
-        $exceptionLog->sessionuid = $request->session()->getId();
-        return $exceptionLog;
-    }
-
 
 }

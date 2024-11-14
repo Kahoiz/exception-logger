@@ -15,5 +15,6 @@ class Exceptionlog extends Model
         'line',
         'trace',
         'sessionuid',
+        'environment'
     ];
 }
