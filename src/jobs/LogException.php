@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use kahoiz\ExceptionLogger\Exceptionlog;
 
 class LogException implements ShouldQueue
 {
@@ -14,12 +15,6 @@ class LogException implements ShouldQueue
 
     protected array $data;
 
-    /**
-     * Create a new job instance.
-     *
-     * @param \Exception $exception
-     * @return void
-     */
     public function __construct(\Exception $exception, $sessionuid)
     {
         $this->data = [
@@ -30,6 +25,12 @@ class LogException implements ShouldQueue
             'sessionuid' => $sessionuid,
             'environment' => env("APP_NAME")
         ];
+    }
+
+
+    public function handle(){
+        $exceptionlog = new Exceptionlog($this->data);
+        $exceptionlog->save();
     }
 
 

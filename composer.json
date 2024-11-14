@@ -1,7 +1,12 @@
 {
     "name": "kahoiz/exception-logger",
     "description": "A simple exception logger for PHP",
-    "keywords": ["php", "package", "exception", "logging"],
+    "keywords": [
+        "php",
+        "package",
+        "exception",
+        "logging"
+    ],
     "license": "MIT",
     "config": {
         "sort-packages": true,
@@ -13,6 +18,11 @@
     "extra": {
         "branch-alias": {
             "dev-master": "2.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "kahoiz\\ExceptionLogger\\ExceptionLoggerServiceProvider"
+            ]
         }
     },
     "require": {
