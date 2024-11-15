@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Exceptionlog extends Model
 {
+    public $timestamps = false;
 
     protected $table = 'exception_logs';
 
