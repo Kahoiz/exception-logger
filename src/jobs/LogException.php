@@ -12,26 +12,22 @@ use kahoiz\ExceptionLogger\Exceptionlog;
 class LogException implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
     protected array $data;
-
     public function __construct(\Exception $exception, $sessionuid)
     {
         $this->data = [
+            'type' => get_class($exception),
             'message' => $exception->getMessage(),
             'file' => $exception->getFile(),
             'line' => $exception->getLine(),
             'trace' => $exception->getTraceAsString(),
             'sessionuid' => $sessionuid,
-            'environment' => env("APP_NAME")
+            'environment' => env("APP_NAME"),
+            'thrown_at' => now()
         ];
     }
-
-
     public function handle(){
         $exceptionlog = new Exceptionlog($this->data);
         $exceptionlog->save();
     }
-
-
 }

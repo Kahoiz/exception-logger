@@ -10,11 +10,13 @@ class Exceptionlog extends Model
     protected $table = 'exception-logs';
 
     protected $fillable = [
+        'type',
         'message',
         'file',
         'line',
         'trace',
         'sessionuid',
-        'environment'
+        'environment',
+        'thrown_at'
     ];
 }

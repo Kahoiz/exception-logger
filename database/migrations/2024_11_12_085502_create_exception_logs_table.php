@@ -13,13 +13,14 @@ return new class extends Migration {
     {
         Schema::create('exception_logs', function (Blueprint $table) {
             $table->id();
+            $table->string('type');
             $table->string('message');
             $table->string('file');
             $table->integer('line');
             $table->text('trace');
             $table->string('sessionuid');
             $table->string('environment');
-            $table->timestamps();
+            $table->timestamp('thrown_at');
         });
     }
 
