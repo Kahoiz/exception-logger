@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Exceptionlog extends Model
 {
 
-    protected $table = 'exception-logs';
+    protected $table = 'exception_logs';
 
     protected $fillable = [
         'type',
