@@ -32,7 +32,7 @@ class NewException
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new PrivateChannel('new-exception'),
         ];
     }
 }
