@@ -19,7 +19,7 @@ class ExceptionLoggerMiddleware
 
             return $response;
         }
-        LogException::dispatch($response->exception, $request->session()->getId()->onQueue('new-exception'));
+        LogException::dispatch($response->exception, $request->session()->getId())->onQueue('new-exception');
 
         return $response;
 
