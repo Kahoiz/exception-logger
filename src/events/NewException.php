@@ -24,15 +24,6 @@ class NewException
         $this->data = $data;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, Channel>
-     */
-    public function broadcastOn(): array
-    {
-        return [
-            new PrivateChannel('new-exception'),
-        ];
-    }
+
+
 }

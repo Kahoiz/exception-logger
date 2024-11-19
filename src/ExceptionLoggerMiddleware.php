@@ -48,7 +48,7 @@ class ExceptionLoggerMiddleware
             'environment' => env("APP_NAME"),
             'thrown_at' => now()
         ];
-        event(new NewException($data));
+        NewException::dispatch($data);
         return $response;
 
     }
