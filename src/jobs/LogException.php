@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use kahoiz\ExceptionLogger\events\EventDispatcher;
 use kahoiz\ExceptionLogger\Exceptionlog;
 
 class LogException implements ShouldQueue
@@ -27,7 +28,11 @@ class LogException implements ShouldQueue
         ];
     }
     public function handle(){
+
         $exceptionlog = new Exceptionlog($this->data);
         $exceptionlog->save();
+        EventDispatcher::dispatch('exception.logged', $exceptionlog);
+
+
     }
 }
