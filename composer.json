@@ -19,52 +19,46 @@
         "branch-alias": {
             "dev-master": "2.x-dev"
         },
-        "laravel": {
-            "providers": [
-                "kahoiz\\ExceptionLogger\\ExceptionLoggerServiceProvider"
+        "require": {
+            "php": "^8.0, ^8.1,^8.2,^8.3",
+            "illuminate/contracts": "^8.0 || ^9.0 || ^10.0 || ^11.0"
+        },
+        "require-dev": {
+            "nunomaduro/collision": "^5.0||^8.1.1||^7.10.0",
+            "orchestra/testbench": "^6.0||^9.0.0||^8.22.0",
+            "phpstan/phpstan": "^1.5.6",
+            "phpunit/phpunit": "^9.3.3 || ^10.0 || ^11.0"
+        },
+        "autoload": {
+            "psr-4": {
+                "kahoiz\\ExceptionLogger\\": "src"
+            }
+        },
+        "autoload-dev": {
+            "psr-4": {
+                "kahoiz\\ExceptionLogger\\Tests\\": "tests"
+            }
+        },
+        "scripts": {
+            "lint:rector": "@fix:rector --dry-run",
+            "lint:ecs": "ecs check --ansi",
+            "lint:phpstan": "phpstan analyse --ansi",
+            "fix:rector": "rector process --ansi",
+            "fix:ecs": "@lint:ecs --fix",
+            "test:phpunit": "phpunit --colors=always",
+            "lint": [
+                "@lint:rector",
+                "@lint:ecs",
+                "@lint:phpstan"
+            ],
+            "fix": [
+                "@fix:rector",
+                "@fix:ecs"
+            ],
+            "test": [
+                "@test:phpunit"
             ]
-        }
-    },
-    "require": {
-        "php": "^8.0, ^8.1,^8.2,^8.3",
-        "illuminate/contracts": "^8.0 || ^9.0 || ^10.0 || ^11.0"
-    },
-    "require-dev": {
-        "nunomaduro/collision": "^5.0||^8.1.1||^7.10.0",
-        "orchestra/testbench": "^6.0||^9.0.0||^8.22.0",
-        "phpstan/phpstan": "^1.5.6",
-        "phpunit/phpunit": "^9.3.3 || ^10.0 || ^11.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "kahoiz\\ExceptionLogger\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "kahoiz\\ExceptionLogger\\Tests\\": "tests"
-        }
-    },
-    "scripts": {
-        "lint:rector": "@fix:rector --dry-run",
-        "lint:ecs": "ecs check --ansi",
-        "lint:phpstan": "phpstan analyse --ansi",
-        "fix:rector": "rector process --ansi",
-        "fix:ecs": "@lint:ecs --fix",
-        "test:phpunit": "phpunit --colors=always",
-        "lint": [
-            "@lint:rector",
-            "@lint:ecs",
-            "@lint:phpstan"
-        ],
-        "fix": [
-            "@fix:rector",
-            "@fix:ecs"
-        ],
-        "test": [
-            "@test:phpunit"
-        ]
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
-}
+        },
+        "minimum-stability": "dev",
+        "prefer-stable": true
+    }
