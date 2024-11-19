@@ -14,6 +14,7 @@ class LogException implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected array $data;
+    public $queue = 'new-exception';
     public function __construct(\Exception $exception, $sessionuid)
     {
         $this->data = [
@@ -29,8 +30,8 @@ class LogException implements ShouldQueue
     }
     public function handle(){
 
-        $exceptionlog = new Exceptionlog($this->data);
-        $exceptionlog->save();
+//        $exceptionlog = new Exceptionlog($this->data);
+//        $exceptionlog->save();
         EventDispatcher::dispatch('exception.logged', $exceptionlog);
 
 
