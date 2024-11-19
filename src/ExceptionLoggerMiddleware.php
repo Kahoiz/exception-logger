@@ -5,6 +5,7 @@ namespace kahoiz\ExceptionLogger;
 use Closure;
 use Illuminate\Support\Facades\Queue;
 use kahoiz\ExceptionLogger\events\EventDispatcher;
+use kahoiz\ExceptionLogger\events\NewException;
 use kahoiz\ExceptionLogger\jobs\LogException;
 
 
@@ -47,7 +48,7 @@ class ExceptionLoggerMiddleware
             'environment' => env("APP_NAME"),
             'thrown_at' => now()
         ];
-        EventDispatcher::dispatch('new-exception', $data);
+        event(new NewException($data));
         return $response;
 
     }
