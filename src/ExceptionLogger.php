@@ -29,7 +29,7 @@ class ExceptionLogger
             'trace' => $response->exception->getTraceAsString(),
             'sessionuid' => $request->session()->getId(),
             'environment' => env("APP_NAME"),
-            'thrown_at' => now()
+            'thrown_at' => now()->format('Y-m-d H:i:s')
         ], JSON_THROW_ON_ERROR), 'new-exception');
 
         //EVENT
