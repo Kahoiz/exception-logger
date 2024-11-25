@@ -28,12 +28,13 @@ class ExceptionLogger
 
         $data = [
             'type' => get_class($response->exception),
+            'code' => $response->exception->getCode(),
             'message' => $response->exception->getMessage(),
             'file' => $response->exception->getFile(),
             'line' => $response->exception->getLine(),
             'trace' => $response->exception->getTraceAsString(),
             'uuid' => (string) Str::uuid(),
-            'environment' => env("APP_NAME"),
+            'application' => env("APP_NAME"),
             'user_id' => $request->user()->id ?? null,
             'thrown_at' => now()->format('Y-m-d H:i:s')
         ];
@@ -53,12 +54,13 @@ class ExceptionLogger
     {
         $validator = Validator::make($data, [
             'type' => 'required|string',
+            'code' => 'required|integer',
             'message' => 'required|string',
             'file' => 'required|string',
             'line' => 'required|integer',
             'trace' => 'required|string',
             'uuid' => 'required|string',
-            'environment' => 'required|string',
+            'application' => 'required|string',
             'user_id' => 'nullable|integer',
             'thrown_at' => 'required|date'
         ]);
