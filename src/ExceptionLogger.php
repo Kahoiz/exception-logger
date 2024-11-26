@@ -67,12 +67,12 @@ class ExceptionLogger
         $previous = $exception->getPrevious();
 
         return [
-            'type' => get_class($exception),
-            'code' => $exception->getCode(),
-            'message' => $exception->getMessage(),
-            'file' => $exception->getFile(),
-            'line' => $exception->getLine(),
-            'trace' => $exception->getTraceAsString(),
+            'type' => get_class($previous),
+            'code' => $previous->getCode(),
+            'message' => $previous->getMessage(),
+            'file' => $previous->getFile(),
+            'line' => $previous->getLine(),
+            'trace' => $previous->getTraceAsString(),
             'previous' => $this->getPreviousExceptionData($previous),
         ];
     }
