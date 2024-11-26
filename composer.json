@@ -16,6 +16,11 @@
         }
     },
     "extra": {
+        "laravel": {
+            "providers": [
+                "kahoiz\\ExceptionLogger\\ExceptionLoggerServiceProvider"
+            ]
+        },
         "branch-alias": {
             "dev-master": "2.x-dev"
         }
@@ -35,6 +40,7 @@
             "kahoiz\\ExceptionLogger\\": "src"
         }
     },
+
     "autoload-dev": {
         "psr-4": {
             "kahoiz\\ExceptionLogger\\Tests\\": "tests"

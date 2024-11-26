@@ -25,7 +25,11 @@ class ExceptionLogger
 
             return $response;
         }
-
+        //check if the exception is configured in the config file
+        $exceptionsToIgnore = config('exceptions.exceptions');
+        if (in_array(get_class($response->exception), $exceptionsToIgnore, true)) {
+            return $response;
+        }
 
         $data = [
             'type' => get_class($response->exception),
