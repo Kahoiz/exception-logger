@@ -76,7 +76,7 @@ class ExceptionLogger
             'uuid' => $uuid,
             'application' => env("APP_NAME"),
             'thrown_at' => now()->format('Y-m-d H:i:s'),
-            'previous' => $this->getPreviousExceptionData($previous),
+            'previous' => $this->getPreviousExceptionData($previous,$uuid),
 
         ];
     }
