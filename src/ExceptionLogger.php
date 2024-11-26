@@ -46,9 +46,8 @@ class ExceptionLogger
         ];
 
         if($response->exception->getPrevious()){
-            $data['previous'] = $this->getPreviousExceptionData($response->exception->getPrevious());
+            $data['previous'] = $this->getPreviousExceptionData($response->exception);
         }
-        //In laravel 8, pushRaw doesn't automatically encode the array to a json string, so we'll have to do it manually
 
         if ($this->validate($data)) {
             Queue::pushRaw(json_encode($data), 'new-exception');
@@ -65,6 +64,8 @@ class ExceptionLogger
         if (!$exception->getPrevious()) {
             return null;
         }
+        $previous = $exception->getPrevious();
+
         return [
             'type' => get_class($exception),
             'code' => $exception->getCode(),
@@ -72,7 +73,7 @@ class ExceptionLogger
             'file' => $exception->getFile(),
             'line' => $exception->getLine(),
             'trace' => $exception->getTraceAsString(),
-            'previous' => $this->getPreviousExceptionData($exception->getPrevious())
+            'previous' => $this->getPreviousExceptionData($previous),
         ];
     }
     private function validate(array $data) : bool
