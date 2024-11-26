@@ -30,7 +30,7 @@ class ExceptionLogger
         if (in_array(get_class($response->exception), $exceptionsToIgnore, true)) {
             return $response;
         }
-
+        $uuid = (string) Str::uuid();
         $data = [
             'type' => get_class($response->exception),
             'code' => $response->exception->getCode(),
@@ -38,7 +38,7 @@ class ExceptionLogger
             'file' => $response->exception->getFile(),
             'line' => $response->exception->getLine(),
             'trace' => $response->exception->getTraceAsString(),
-            'uuid' => (string) Str::uuid(),
+            'uuid' => $uuid,
             'application' => env("APP_NAME"),
             'user_id' => $request->user()->id ?? null,
             'thrown_at' => now()->format('Y-m-d H:i:s'),
@@ -46,7 +46,7 @@ class ExceptionLogger
         ];
 
         if($response->exception->getPrevious()){
-            $data['previous'] = $this->getPreviousExceptionData($response->exception);
+            $data['previous'] = $this->getPreviousExceptionData($response->exception,$uuid);
         }
 
         if ($this->validate($data)) {
@@ -59,7 +59,7 @@ class ExceptionLogger
 
     }
 
-    private function getPreviousExceptionData($exception)
+    private function getPreviousExceptionData($exception,$uuid)
     {
         if (!$exception->getPrevious()) {
             return null;
@@ -73,7 +73,7 @@ class ExceptionLogger
             'file' => $previous->getFile(),
             'line' => $previous->getLine(),
             'trace' => $previous->getTraceAsString(),
-            'uuid' => (string) Str::uuid(),
+            'uuid' => $uuid,
             'application' => env("APP_NAME"),
             'thrown_at' => now()->format('Y-m-d H:i:s'),
             'previous' => $this->getPreviousExceptionData($previous),
