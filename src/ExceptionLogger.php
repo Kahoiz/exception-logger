@@ -73,7 +73,11 @@ class ExceptionLogger
             'file' => $previous->getFile(),
             'line' => $previous->getLine(),
             'trace' => $previous->getTraceAsString(),
+            'uuid' => (string) Str::uuid(),
+            'application' => env("APP_NAME"),
+            'thrown_at' => now()->format('Y-m-d H:i:s'),
             'previous' => $this->getPreviousExceptionData($previous),
+
         ];
     }
     private function validate(array $data) : bool
