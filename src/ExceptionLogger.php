@@ -17,14 +17,15 @@ class ExceptionLogger
 
         $response = $next($request);
 
-        if(!$response->exception) {
-
-            return $response;
-        }
         //No desire to log exceptions in local environment
         if (env('APP_ENV') !== 'production') {
             return $response;
         }
+        if(!$response->exception) {
+
+            return $response;
+        }
+
 
         $data = [
             'type' => get_class($response->exception),
@@ -36,8 +37,20 @@ class ExceptionLogger
             'uuid' => (string) Str::uuid(),
             'application' => env("APP_NAME"),
             'user_id' => $request->user()->id ?? null,
-            'thrown_at' => now()->format('Y-m-d H:i:s')
+            'thrown_at' => now()->format('Y-m-d H:i:s'),
+
         ];
+
+        if($response->exception->previous){
+            $data['previous'] = [
+                'type' => get_class($response->exception->previous),
+                'code' => $response->exception->previous->getCode(),
+                'message' => $response->exception->previous->getMessage(),
+                'file' => $response->exception->previous->getFile(),
+                'line' => $response->exception->previous->getLine(),
+                'trace' => $response->exception->previous->getTraceAsString(),
+            ];
+        }
         //In laravel 8, pushRaw doesn't automatically encode the array to a json string, so we'll have to do it manually
 
         if ($this->validate($data)) {
@@ -62,7 +75,8 @@ class ExceptionLogger
             'uuid' => 'required|string',
             'application' => 'required|string',
             'user_id' => 'nullable|integer',
-            'thrown_at' => 'required|date'
+            'thrown_at' => 'required|date',
+            'previous' => 'nullable|array',
         ]);
         return $validator->passes();
     }
