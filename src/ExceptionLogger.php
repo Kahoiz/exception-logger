@@ -59,7 +59,7 @@ class ExceptionLogger
 
     private function getPreviousExceptionData($exception, $uuid): ?array
     {
-        if (!$exception) {
+        if (!$exception->getPrevious()) {
             return null;
         }
 
