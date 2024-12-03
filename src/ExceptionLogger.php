@@ -21,16 +21,19 @@ class ExceptionLogger
         if (env('APP_ENV') !== 'production') {
             return $response;
         }
-        if(!$response->exception) {
+        //No exception, no need to log
+        if (!$response->exception) {
 
             return $response;
         }
-        //check if the exception is configured in the config file
+        //Check if the exception is configured in the config file
         $exceptionsToIgnore = config('exceptions.exceptions');
         if (in_array(get_class($response->exception), $exceptionsToIgnore, true)) {
             return $response;
         }
-        $uuid = (string) Str::uuid();
+
+        $uuid = (string)Str::uuid();
+
         $data = [
             'type' => get_class($response->exception),
             'code' => $response->exception->getCode(),
@@ -42,28 +45,24 @@ class ExceptionLogger
             'application' => env("APP_NAME"),
             'user_id' => $request->user()->id ?? null,
             'thrown_at' => now()->format('Y-m-d H:i:s'),
-
+            'previous' => $this->getPreviousExceptionData($response->exception, $uuid)
         ];
-
-        if($response->exception->getPrevious()){
-            $data['previous'] = $this->getPreviousExceptionData($response->exception,$uuid);
-        }
 
         if ($this->validate($data)) {
             Queue::pushRaw(json_encode($data), 'new-exception');
-        }
-        else {
+        } else {
             Queue::pushRaw(json_encode($data), 'invalid-exception');
         }
         return $response;
 
     }
 
-    private function getPreviousExceptionData($exception,$uuid)
+    private function getPreviousExceptionData($exception, $uuid): ?array
     {
-        if (!$exception->getPrevious()) {
+        if (!$exception) {
             return null;
         }
+
         $previous = $exception->getPrevious();
 
         return [
@@ -76,11 +75,12 @@ class ExceptionLogger
             'uuid' => $uuid,
             'application' => env("APP_NAME"),
             'thrown_at' => now()->format('Y-m-d H:i:s'),
-            'previous' => $this->getPreviousExceptionData($previous,$uuid),
+            'previous' => $this->getPreviousExceptionData($previous, $uuid),
 
         ];
     }
-    private function validate(array $data) : bool
+
+    private function validate(array $data): bool
     {
         $validator = Validator::make($data, [
             'type' => 'required|string',

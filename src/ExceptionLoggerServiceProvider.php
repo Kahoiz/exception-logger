@@ -12,12 +12,9 @@ class ExceptionLoggerServiceProvider extends ServiceProvider
             __DIR__ . '/../config/exceptions.php' => config_path('exceptions.php'),
         ], 'config');
     }
-
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/exceptions.php', 'exceptions');
     }
 }
-{
 
-}
