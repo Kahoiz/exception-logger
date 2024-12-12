@@ -18,7 +18,7 @@ class ExceptionLogger
         $response = $next($request);
 
         //No desire to log exceptions in local environment
-        if (env('APP_ENV') !== 'production') {
+        if (config('exceptions.environment') !== 'production') {
             return $response;
         }
         //No exception, no need to log
@@ -42,7 +42,7 @@ class ExceptionLogger
             'line' => $response->exception->getLine(),
             'trace' => $response->exception->getTraceAsString(),
             'uuid' => $uuid,
-            'application' => env("APP_NAME"),
+            'application' => config('exceptions.application'),
             'user_id' => $request->user()->id ?? null,
             'thrown_at' => now()->format('Y-m-d H:i:s'),
             'previous' => $this->getPreviousExceptionData($response->exception, $uuid)
@@ -73,7 +73,7 @@ class ExceptionLogger
             'line' => $previous->getLine(),
             'trace' => $previous->getTraceAsString(),
             'uuid' => $uuid,
-            'application' => env("APP_NAME"),
+            'application' => config('exceptions.application'),
             'thrown_at' => now()->format('Y-m-d H:i:s'),
             'previous' => $this->getPreviousExceptionData($previous, $uuid),
 

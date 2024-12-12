@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\QueryException;
 
 /**
@@ -7,5 +8,7 @@ use Illuminate\Database\QueryException;
 return [
     'exceptions' => [
         QueryException::class,
-    ]
+    ],
+    'application' => env('APP_NAME'),
+    'environment' => env('APP_ENV'),
 ];
